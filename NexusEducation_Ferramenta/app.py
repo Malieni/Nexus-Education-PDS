@@ -5,9 +5,9 @@ from llama_index.core import Settings
 from llama_index.llms.groq import Groq
 from fpdf import FPDF
 from datetime import datetime
-from NexusEducation_Ferramenta.auth import autenticar, cadastrar, mostrar_login, mostrar_cadastro, login_submit, cadastro_submit
-from NexusEducation_Ferramenta.pdf_tools import analisar_documentos, add_historico, gerar_pdf, resetar_aplicação
-from NexusEducation_Ferramenta.utils import gerar_timestamp
+from auth import autenticar, cadastrar, mostrar_login, mostrar_cadastro, login_submit, cadastro_submit
+from pdf_tools import analisar_documentos, add_historico, gerar_pdf, resetar_aplicação
+from utils import gerar_timestamp
 
 #API_KEY
 api_key = os.getenv("chave")
