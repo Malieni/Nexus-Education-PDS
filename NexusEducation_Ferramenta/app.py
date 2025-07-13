@@ -157,6 +157,8 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
     pagina_atual = gr.State(value="inicio")  # "inicio" ou "configuracoes"
     tema_atual = gr.State(value="shivi/calm_seafoam")
     idioma_atual = gr.State(value="pt")
+    usuario_email = gr.State(value=None)
+    usuario_analises = gr.State(value=[])
 
     with gr.Row():
         # Conteúdo principal (dinâmico)
@@ -279,5 +281,8 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
     # Quando uma nova análise for concluída, salvar na lista do usuário (mock)
     # Exemplo: salvar_analise(usuario_email, "Ementa de Matemática - 2024")
 
+#if __name__=="__main__":
+#    app.launch(share=True)
+
 if __name__=="__main__":
-    app.launch(share=True)
+    app.launch(server_name="0.0.0.0", server_port=10000)
