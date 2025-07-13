@@ -279,9 +279,5 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
     # Quando uma nova análise for concluída, salvar na lista do usuário (mock)
     # Exemplo: salvar_analise(usuario_email, "Ementa de Matemática - 2024")
 
-#if __name__=="__main__":
-#    app.launch(share=True)
-
 if __name__=="__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.launch(server_name="0.0.0.0", server_port=port)
+    app.launch(share=True)
