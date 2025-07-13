@@ -4,7 +4,7 @@ from llama_index.core import Settings
 from fpdf import FPDF
 from datetime import datetime
 import gradio as gr
-from NexusEducation_Ferramenta.utils import gerar_timestamp
+from utils import gerar_timestamp
 import json
 
 def analisar_documentos(arquivo):
