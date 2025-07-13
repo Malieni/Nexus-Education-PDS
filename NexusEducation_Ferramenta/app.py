@@ -131,14 +131,13 @@ def salvar_analise(email, descricao):
 # Novo grupo para formulário de dados do aluno e curso de destino
 formulario_analise_box = gr.Group(visible=False, elem_id="formulario_analise_box")
 with formulario_analise_box:
-    with gr.Column():
-        nome_aluno = gr.Textbox(label="Nome do Aluno")
-        matricula_aluno = gr.Textbox(label="Matrícula")
-        curso_destino = gr.Textbox(label="Curso de Destino")
-        codigo_curso = gr.Textbox(label="Código do Curso de Destino")
-        carga_horaria = gr.Textbox(label="Carga Horária do Curso de Destino")
-        avancar_upload = gr.Button("Avançar para Upload do PDF")
-        voltar_add_analise = gr.Button("Voltar")
+    nome_aluno = gr.Textbox(label="Nome do Aluno")
+    matricula_aluno = gr.Textbox(label="Matrícula")
+    curso_destino = gr.Textbox(label="Curso de Destino")
+    codigo_curso = gr.Textbox(label="Código do Curso de Destino")
+    carga_horaria = gr.Textbox(label="Carga Horária do Curso de Destino")
+    avancar_upload = gr.Button("Avançar para Upload do PDF")
+    voltar_add_analise = gr.Button("Voltar")
 
 # Função para mostrar formulário ao clicar em '+ Nova Análise'
 def mostrar_formulario_analise(*_):
@@ -167,11 +166,10 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
             # Add Análise (Início)
             add_analise_box = gr.Group(visible=True, elem_id="add_analise_box")
             with add_analise_box:
-                with gr.Column():
-                    logo_img = gr.Image(value=None, label=textos['pt']['logo'], height=100)
-                    markdown_bemvindo = gr.Markdown(textos['pt']['bem_vindo'])
-                    lista_analises = gr.List(label=textos['pt']['ementas_anal'], interactive=False)
-                    botao_add = gr.Button(textos['pt']['nova_analise'])
+                logo_img = gr.Image(value=None, label=textos['pt']['logo'], height=100)
+                markdown_bemvindo = gr.Markdown(textos['pt']['bem_vindo'])
+                lista_analises = gr.List(label=textos['pt']['ementas_anal'], interactive=False)
+                botao_add = gr.Button(textos['pt']['nova_analise'])
             # Configurações
             configuracoes_box = gr.Group(visible=False, elem_id="configuracoes_box")
             with configuracoes_box:
@@ -209,9 +207,8 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
                 input_arquivo = gr.File(file_count="single", type="filepath", label="Upload PDF")
                 botao_submeter = gr.Button("Enviar")
                 output_resposta = gr.Textbox(label=textos['pt']['pdf_resposta'])
-                with gr.Row():
-                    botao_add_pdf = gr.Button(textos['pt']['add_pdf'])
-                    botao_gerar_pdf = gr.Button(textos['pt']['gerar_pdf'])
+                botao_add_pdf = gr.Button(textos['pt']['add_pdf'])
+                botao_gerar_pdf = gr.Button(textos['pt']['gerar_pdf'])
                 arquivo_pdf = gr.File(label=textos['pt']['download_pdf'])
                 botao_resetar = gr.Button(textos['pt']['resetar'])
                 historico_estado = gr.State(value=[])
