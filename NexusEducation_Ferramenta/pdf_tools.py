@@ -1,6 +1,5 @@
 # pdf_tools.py
-#from docling.document_converter import DocumentConverter
-import PyPDF2
+from docling.document_converter import DocumentConverter
 from llama_index.core import Settings
 from fpdf import FPDF
 from datetime import datetime
@@ -12,12 +11,11 @@ def analisar_documentos(arquivo):
     if not arquivo:
         return "Nenhum arquivo enviado."
     try:
-        with open(arquivo.name, "rb") as f:
-            reader = PyPDF2.PdfReader(f)
-            texto = ""
-            for page in reader.pages:
-                texto += page.extract_text() or ""
-        resultado = {"conteudo": texto}
+        converter = DocumentConverter()
+        res = converter.convert(arquivo.name)
+        doc = res.document
+        texto = doc.export_to_markdown()
+        
         # Prompt para a IA
         prompt = (
             "Analise o seguinte conteúdo extraído de um PDF de ementa de disciplina. "
