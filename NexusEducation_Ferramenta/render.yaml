@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: nexus-education
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python NexusEducation_Ferramenta/app.py
-    plan: free 
