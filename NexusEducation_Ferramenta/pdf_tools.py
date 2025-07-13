@@ -1,25 +1,34 @@
 # pdf_tools.py
-from docling.document_converter import DocumentConverter
+#from docling.document_converter import DocumentConverter
+import PyPDF2
 from llama_index.core import Settings
 from fpdf import FPDF
 from datetime import datetime
 import gradio as gr
 from NexusEducation_Ferramenta.utils import gerar_timestamp
+import json
 
 def analisar_documentos(arquivo):
-    converter = DocumentConverter()
-    textos = ""
-    # Converte o PDF e agrega conteúdo
     if not arquivo:
         return "Nenhum arquivo enviado."
-    res = converter.convert(arquivo.name)
-    doc = res.document
-    texto = doc.export_to_markdown()
-    textos += texto + "\n\n"
-    # Chama o modelo de linguagem para gerar uma resposta
-    prompt = f"Resuma o conteúdo do documento:\n{textos}, e faça uma análise semântica a análise semântica deve ser feita apenas do (conteúdo programático) se não tiver apenas faça o resumo dos documentos"
-    resposta = Settings.llm.complete(prompt)
-    return resposta.text
+    try:
+        with open(arquivo.name, "rb") as f:
+            reader = PyPDF2.PdfReader(f)
+            texto = ""
+            for page in reader.pages:
+                texto += page.extract_text() or ""
+        resultado = {"conteudo": texto}
+        # Prompt para a IA
+        prompt = (
+            "Analise o seguinte conteúdo extraído de um PDF de ementa de disciplina. "
+            "Resuma o conteúdo, destaque pontos importantes e faça uma análise semântica do conteúdo programático. "
+            "Se não houver conteúdo programático, apenas faça o resumo.\n\n"
+            f"Conteúdo extraído:\n{texto}"
+        )
+        resposta = Settings.llm.complete(prompt)
+        return resposta.text
+    except Exception as e:
+        return f"Erro ao processar o PDF: {e}"
 
 def add_historico(resposta, historico_estado):
     if resposta:
