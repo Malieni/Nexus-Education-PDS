@@ -127,17 +127,6 @@ def salvar_analise(email, descricao):
     analises_por_usuario[email].append(descricao)
     return analises_por_usuario[email]
 
-# Novo grupo para formulário de dados do aluno e curso de destino
-formulario_analise_box = gr.Group(visible=False, elem_id="formulario_analise_box")
-with formulario_analise_box:
-    nome_aluno = gr.Textbox(label="Nome do Aluno")
-    matricula_aluno = gr.Textbox(label="Matrícula")
-    curso_destino = gr.Textbox(label="Curso de Destino")
-    codigo_curso = gr.Textbox(label="Código do Curso de Destino")
-    carga_horaria = gr.Textbox(label="Carga Horária do Curso de Destino")
-    avancar_upload = gr.Button("Avançar para Upload do PDF")
-    voltar_add_analise = gr.Button("Voltar")
-
 # Função para mostrar formulário ao clicar em '+ Nova Análise'
 def mostrar_formulario_analise(*_):
     return gr.update(visible=False), gr.update(visible=False), gr.update(visible=False), gr.update(visible=False), gr.update(visible=True)
@@ -169,6 +158,18 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
                 markdown_bemvindo = gr.Markdown(textos['pt']['bem_vindo'])
                 lista_analises = gr.List(label=textos['pt']['ementas_anal'], interactive=False)
                 botao_add = gr.Button(textos['pt']['nova_analise'])
+            
+            # Formulário de dados do aluno e curso de destino
+            formulario_analise_box = gr.Group(visible=False, elem_id="formulario_analise_box")
+            with formulario_analise_box:
+                nome_aluno = gr.Textbox(label="Nome do Aluno")
+                matricula_aluno = gr.Textbox(label="Matrícula")
+                curso_destino = gr.Textbox(label="Curso de Destino")
+                codigo_curso = gr.Textbox(label="Código do Curso de Destino")
+                carga_horaria = gr.Textbox(label="Carga Horária do Curso de Destino")
+                avancar_upload = gr.Button("Avançar para Upload do PDF")
+                voltar_add_analise = gr.Button("Voltar")
+            
             # Configurações
             configuracoes_box = gr.Group(visible=False, elem_id="configuracoes_box")
             with configuracoes_box:
@@ -178,6 +179,7 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
                 editar_curso = gr.Textbox(label=textos['pt']['curso'], placeholder="Edite seu curso")
                 salvar_config = gr.Button(textos['pt']['salvar'])
                 config_msg = gr.Markdown(visible=False)
+            
             # Login
             login_box = gr.Group(visible=True)
             with login_box:
@@ -187,6 +189,7 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
                 login_btn = gr.Button(textos['pt']['login_entrar'])
                 login_msg = gr.Markdown(visible=False)
                 go_cadastro = gr.Button(textos['pt']['login_nao_tem_conta'])
+            
             # Cadastro
             cadastro_box = gr.Group(visible=False)
             with cadastro_box:
@@ -199,6 +202,7 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
                 cadastro_btn = gr.Button(textos['pt']['cadastro_btn'])
                 cadastro_msg = gr.Markdown(visible=False)
                 go_login = gr.Button(textos['pt']['login_ja_tem_conta'])
+            
             # Tela principal de análise PDF
             main_box = gr.Group(visible=False)
             with main_box:
@@ -223,6 +227,7 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
                 botao_resetar.click(fn=resetar_aplicação,
                                     inputs=[],
                                     outputs=[input_arquivo, output_resposta])
+        
         # Barra lateral à direita
         with gr.Column(scale=1, min_width=180):
             markdown_menu = gr.Markdown(textos['pt']['menu'])
@@ -267,11 +272,10 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
 
     # Botão '+' para iniciar nova análise
     botao_add.click(fn=mostrar_formulario_analise, inputs=[], outputs=[login_box, cadastro_box, main_box, add_analise_box, formulario_analise_box])
-
-    # Ajustar botao_add para mostrar o formulário
-    botao_add.click(fn=mostrar_formulario_analise, inputs=[], outputs=[login_box, cadastro_box, main_box, add_analise_box, formulario_analise_box])
+    
     # Botão de avançar para upload do PDF
     avancar_upload.click(fn=avancar_para_upload, inputs=[nome_aluno, matricula_aluno, curso_destino, codigo_curso, carga_horaria], outputs=[login_box, cadastro_box, main_box, add_analise_box, formulario_analise_box])
+    
     # Botão de voltar para Add Análise
     voltar_add_analise.click(fn=voltar_para_add_analise, inputs=[], outputs=[login_box, cadastro_box, main_box, add_analise_box, formulario_analise_box])
 
