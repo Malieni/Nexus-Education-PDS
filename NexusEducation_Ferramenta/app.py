@@ -1,5 +1,6 @@
 import os
 import gradio as gr
+import json
 from docling.document_converter import DocumentConverter
 from llama_index.core import Settings
 from llama_index.llms.groq import Groq
@@ -22,9 +23,73 @@ usuarios = {}
 # Estado global para armazenar análises por usuário (em memória)
 analises_por_usuario = {}
 
+# Arquivo para salvar o idioma selecionado
+LANGUAGE_FILE = "selected_language.json"
+
+def save_language(language):
+    """Salva o idioma selecionado em um arquivo"""
+    try:
+        with open(LANGUAGE_FILE, 'w') as f:
+            json.dump({'language': language}, f)
+    except Exception as e:
+        print(f"Erro ao salvar idioma: {e}")
+
+def load_language():
+    """Carrega o idioma salvo ou retorna 'pt' como padrão"""
+    try:
+        if os.path.exists(LANGUAGE_FILE):
+            with open(LANGUAGE_FILE, 'r') as f:
+                data = json.load(f)
+                return data.get('language', 'pt')
+    except Exception as e:
+        print(f"Erro ao carregar idioma: {e}")
+    return 'pt'
+
 # Função para trocar idioma usando o módulo i18n
 def trocar_idioma(novo_idioma):
-    return i18n.update_interface_texts(novo_idioma)
+    # Salva o idioma selecionado
+    save_language(novo_idioma)
+    
+    # Retorna uma mensagem para o usuário recarregar a página
+    if novo_idioma == 'pt':
+        message = "Idioma alterado para Português! Por favor, recarregue a página (F5) para ver as mudanças."
+    else:
+        message = "Language changed to English! Please reload the page (F5) to see the changes."
+    
+    return (
+        # Add Análise
+        i18n.get_text("logo", novo_idioma), i18n.get_text("bem_vindo", novo_idioma), 
+        i18n.get_text("ementas_anal", novo_idioma), i18n.get_text("nova_analise", novo_idioma),
+        # Configurações
+        i18n.get_text("configuracoes", novo_idioma), i18n.get_text("tema", novo_idioma), 
+        i18n.get_text("local", novo_idioma), i18n.get_text("curso", novo_idioma), 
+        i18n.get_text("salvar", novo_idioma),
+        # Menu
+        i18n.get_text("menu", novo_idioma), i18n.get_text("inicio", novo_idioma), 
+        i18n.get_text("config", novo_idioma), i18n.get_text("idioma", novo_idioma),
+        # Login
+        i18n.get_text("login_titulo", novo_idioma), i18n.get_text("login_email", novo_idioma), 
+        i18n.get_text("login_senha", novo_idioma), i18n.get_text("login_entrar", novo_idioma), 
+        i18n.get_text("login_nao_tem_conta", novo_idioma),
+        # Cadastro
+        i18n.get_text("cadastro_titulo", novo_idioma), i18n.get_text("cadastro_email", novo_idioma), 
+        i18n.get_text("cadastro_senha", novo_idioma), i18n.get_text("cadastro_instituto", novo_idioma), 
+        i18n.get_text("cadastro_campus", novo_idioma), i18n.get_text("cadastro_curso", novo_idioma), 
+        i18n.get_text("cadastro_btn", novo_idioma), i18n.get_text("login_ja_tem_conta", novo_idioma),
+        # PDF/Análise
+        i18n.get_text("pdf_resposta", novo_idioma), i18n.get_text("add_pdf", novo_idioma), 
+        i18n.get_text("gerar_pdf", novo_idioma), i18n.get_text("download_pdf", novo_idioma), 
+        i18n.get_text("resetar", novo_idioma),
+        # Formulário
+        i18n.get_text("nome_aluno", novo_idioma), i18n.get_text("matricula", novo_idioma), 
+        i18n.get_text("curso_destino", novo_idioma), i18n.get_text("codigo_curso", novo_idioma), 
+        i18n.get_text("carga_horaria", novo_idioma), i18n.get_text("avancar_upload", novo_idioma), 
+        i18n.get_text("voltar", novo_idioma),
+        # Mensagem de recarregar
+        message,
+        # Estado do idioma
+        novo_idioma
+    )
 
 # Função para exibir a tela de Add Análise
 def mostrar_add_analise(email):
@@ -61,10 +126,14 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
     # Estados para navegação
     pagina_atual = gr.State(value="inicio")  # "inicio" ou "configuracoes"
     tema_atual = gr.State(value="shivi/calm_seafoam")
-    idioma_atual = gr.State(value="pt")
+    idioma_atual = gr.State(value=load_language()) # Carrega o idioma salvo ou 'pt' como padrão
     usuario_email = gr.State(value=None)
     usuario_analises = gr.State(value=[])
 
+    # Carrega o idioma inicial
+    current_language = load_language()
+    i18n.set_language(current_language)
+    
     with gr.Row():
         # Conteúdo principal (dinâmico)
         with gr.Column(scale=4):
@@ -75,6 +144,8 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
                 markdown_bemvindo = gr.Markdown(i18n.get_text("bem_vindo"))
                 lista_analises = gr.List(label=i18n.get_text("ementas_anal"), interactive=False)
                 botao_add = gr.Button(i18n.get_text("nova_analise"))
+                # Mensagem de recarregar (inicialmente vazia)
+                reload_message = gr.Markdown("", visible=False)
             
             # Formulário de dados do aluno e curso de destino
             formulario_analise_box = gr.Group(visible=False, elem_id="formulario_analise_box")
@@ -151,7 +222,7 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
             btn_inicio = gr.Button(i18n.get_text("inicio"))
             btn_config = gr.Button(i18n.get_text("config"))
             gr.Markdown("---")
-            idioma_select = gr.Dropdown(["pt", "en"], value="pt", label=i18n.get_text("idioma"))
+            idioma_select = gr.Dropdown(["pt", "en"], value=current_language, label=i18n.get_text("idioma"))
 
     # Funções de navegação
     def ir_para_inicio():
@@ -183,7 +254,7 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
             cadastro_campus, cadastro_curso, cadastro_btn, go_login,
             output_resposta, botao_add_pdf, botao_gerar_pdf, arquivo_pdf, botao_resetar,
             nome_aluno, matricula_aluno, curso_destino, codigo_curso, carga_horaria, 
-            avancar_upload, voltar_add_analise, idioma_atual
+            avancar_upload, voltar_add_analise, reload_message, idioma_atual
         ]
     )
     
