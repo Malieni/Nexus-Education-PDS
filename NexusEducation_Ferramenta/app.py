@@ -8,6 +8,7 @@ from datetime import datetime
 from auth import autenticar, cadastrar, mostrar_login, mostrar_cadastro, login_submit, cadastro_submit
 from pdf_tools import analisar_documentos, add_historico, gerar_pdf, resetar_aplicação
 from utils import gerar_timestamp
+from i18n import i18n
 
 #API_KEY
 api_key = os.getenv("chave")
@@ -21,129 +22,9 @@ usuarios = {}
 # Estado global para armazenar análises por usuário (em memória)
 analises_por_usuario = {}
 
-# Dicionário de textos para internacionalização
-textos = {
-    'pt': {
-        'bem_vindo': '## Bem-vindo ao Nexus Education!\nAqui você pode analisar ementas de disciplinas e gerar relatórios inteligentes.\nClique no botão "+" para iniciar uma nova análise.',
-        'ementas_anal': 'Ementas analisadas',
-        'nova_analise': '+ Nova Análise',
-        'menu': '## Menu',
-        'inicio': 'Início',
-        'config': 'Configurações',
-        'tema': 'Tema da Página',
-        'local': 'Instituto/Câmpus',
-        'curso': 'Curso',
-        'salvar': 'Salvar Configurações',
-        'configuracoes': '# Configurações',
-        'idioma': 'Idioma',
-        'logo': 'Logo do Projeto',
-        'login_titulo': '# Login do Professor',
-        'login_email': 'E-mail',
-        'login_senha': 'Senha',
-        'login_entrar': 'Entrar',
-        'login_nao_tem_conta': 'Não tem conta? Cadastre-se',
-        'login_ja_tem_conta': 'Já tem conta? Faça login',
-        'cadastro_titulo': '# Cadastro do Professor',
-        'cadastro_email': 'E-mail',
-        'cadastro_senha': 'Senha',
-        'cadastro_instituto': 'Instituto',
-        'cadastro_campus': 'Câmpus',
-        'cadastro_curso': 'Curso',
-        'cadastro_btn': 'Cadastrar',
-        'pdf_resposta': 'Resposta',
-        'add_pdf': 'Adicionar ao histórico do PDF',
-        'gerar_pdf': 'Gerar PDF',
-        'download_pdf': 'Download do PDF Respostas',
-        'resetar': 'Quero analisar outro Documento!',
-        'nome_aluno': 'Nome do Aluno',
-        'matricula': 'Matrícula',
-        'curso_destino': 'Curso de Destino',
-        'codigo_curso': 'Código do Curso de Destino',
-        'carga_horaria': 'Carga Horária do Curso de Destino',
-        'avancar_upload': 'Avançar para Upload do PDF',
-        'voltar': 'Voltar',
-    },
-    'en': {
-        'bem_vindo': '## Welcome to Nexus Education!\nHere you can analyze course syllabi and generate smart reports.\nClick the "+" button to start a new analysis.',
-        'ementas_anal': 'Analyzed Syllabi',
-        'nova_analise': '+ New Analysis',
-        'menu': '## Menu',
-        'inicio': 'Home',
-        'config': 'Settings',
-        'tema': 'Theme',
-        'local': 'Institute/Campus',
-        'curso': 'Course',
-        'salvar': 'Save Settings',
-        'configuracoes': '# Settings',
-        'idioma': 'Language',
-        'logo': 'Project Logo',
-        'login_titulo': '# Teacher Login',
-        'login_email': 'E-mail',
-        'login_senha': 'Password',
-        'login_entrar': 'Sign In',
-        'login_nao_tem_conta': 'Don\'t have an account? Register',
-        'login_ja_tem_conta': 'Already have an account? Login',
-        'cadastro_titulo': '# Teacher Registration',
-        'cadastro_email': 'E-mail',
-        'cadastro_senha': 'Password',
-        'cadastro_instituto': 'Institute',
-        'cadastro_campus': 'Campus',
-        'cadastro_curso': 'Course',
-        'cadastro_btn': 'Register',
-        'pdf_resposta': 'Answer',
-        'add_pdf': 'Add to PDF history',
-        'gerar_pdf': 'Generate PDF',
-        'download_pdf': 'Download PDF Answers',
-        'resetar': 'I want to analyze another document!',
-        'nome_aluno': 'Student Name',
-        'matricula': 'Registration',
-        'curso_destino': 'Destination Course',
-        'codigo_curso': 'Course Code',
-        'carga_horaria': 'Course Workload',
-        'avancar_upload': 'Continue to PDF Upload',
-        'voltar': 'Back',
-    }
-}
-
-# Função para atualizar textos conforme idioma
-def atualizar_textos(idioma):
-    t = textos[idioma]
-    return (
-        # Add Análise
-        t['logo'], t['bem_vindo'], t['ementas_anal'], t['nova_analise'],
-        # Configurações
-        t['configuracoes'], t['tema'], t['local'], t['curso'], t['salvar'],
-        # Menu
-        t['menu'], t['inicio'], t['config'], t['idioma'],
-        # Login
-        t['login_titulo'], t['login_email'], t['login_senha'], t['login_entrar'], t['login_nao_tem_conta'],
-        # Cadastro
-        t['cadastro_titulo'], t['cadastro_email'], t['cadastro_senha'], t['cadastro_instituto'], t['cadastro_campus'], t['cadastro_curso'], t['cadastro_btn'], t['login_ja_tem_conta'],
-        # PDF/Análise
-        t['pdf_resposta'], t['add_pdf'], t['gerar_pdf'], t['download_pdf'], t['resetar']
-    )
-
-# Função para trocar idioma e atualizar todos os textos
+# Função para trocar idioma usando o módulo i18n
 def trocar_idioma(novo_idioma):
-    t = textos[novo_idioma]
-    return (
-        # Add Análise
-        t['logo'], t['bem_vindo'], t['ementas_anal'], t['nova_analise'],
-        # Configurações
-        t['configuracoes'], t['tema'], t['local'], t['curso'], t['salvar'],
-        # Menu
-        t['menu'], t['inicio'], t['config'], t['idioma'],
-        # Login
-        t['login_titulo'], t['login_email'], t['login_senha'], t['login_entrar'], t['login_nao_tem_conta'],
-        # Cadastro
-        t['cadastro_titulo'], t['cadastro_email'], t['cadastro_senha'], t['cadastro_instituto'], t['cadastro_campus'], t['cadastro_curso'], t['cadastro_btn'], t['login_ja_tem_conta'],
-        # PDF/Análise
-        t['pdf_resposta'], t['add_pdf'], t['gerar_pdf'], t['download_pdf'], t['resetar'],
-        # Formulário
-        t['nome_aluno'], t['matricula'], t['curso_destino'], t['codigo_curso'], t['carga_horaria'], t['avancar_upload'], t['voltar'],
-        # Estado do idioma
-        novo_idioma
-    )
+    return i18n.update_interface_texts(novo_idioma)
 
 # Função para exibir a tela de Add Análise
 def mostrar_add_analise(email):
@@ -190,66 +71,66 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
             # Add Análise (Início)
             add_analise_box = gr.Group(visible=True, elem_id="add_analise_box")
             with add_analise_box:
-                logo_img = gr.Image(value=None, label=textos['pt']['logo'], height=100)
-                markdown_bemvindo = gr.Markdown(textos['pt']['bem_vindo'])
-                lista_analises = gr.List(label=textos['pt']['ementas_anal'], interactive=False)
-                botao_add = gr.Button(textos['pt']['nova_analise'])
+                logo_img = gr.Image(value=None, label=i18n.get_text("logo"), height=100)
+                markdown_bemvindo = gr.Markdown(i18n.get_text("bem_vindo"))
+                lista_analises = gr.List(label=i18n.get_text("ementas_anal"), interactive=False)
+                botao_add = gr.Button(i18n.get_text("nova_analise"))
             
             # Formulário de dados do aluno e curso de destino
             formulario_analise_box = gr.Group(visible=False, elem_id="formulario_analise_box")
             with formulario_analise_box:
-                nome_aluno = gr.Textbox(label=textos['pt']['nome_aluno'])
-                matricula_aluno = gr.Textbox(label=textos['pt']['matricula'])
-                curso_destino = gr.Textbox(label=textos['pt']['curso_destino'])
-                codigo_curso = gr.Textbox(label=textos['pt']['codigo_curso'])
-                carga_horaria = gr.Textbox(label=textos['pt']['carga_horaria'])
-                avancar_upload = gr.Button(textos['pt']['avancar_upload'])
-                voltar_add_analise = gr.Button(textos['pt']['voltar'])
+                nome_aluno = gr.Textbox(label=i18n.get_text("nome_aluno"))
+                matricula_aluno = gr.Textbox(label=i18n.get_text("matricula"))
+                curso_destino = gr.Textbox(label=i18n.get_text("curso_destino"))
+                codigo_curso = gr.Textbox(label=i18n.get_text("codigo_curso"))
+                carga_horaria = gr.Textbox(label=i18n.get_text("carga_horaria"))
+                avancar_upload = gr.Button(i18n.get_text("avancar_upload"))
+                voltar_add_analise = gr.Button(i18n.get_text("voltar"))
             
             # Configurações
             configuracoes_box = gr.Group(visible=False, elem_id="configuracoes_box")
             with configuracoes_box:
-                markdown_config = gr.Markdown(textos['pt']['configuracoes'])
-                tema_select = gr.Dropdown(["shivi/calm_seafoam", "default", "soft"], value="shivi/calm_seafoam", label=textos['pt']['tema'])
-                editar_local = gr.Textbox(label=textos['pt']['local'], placeholder="Edite seu local de trabalho")
-                editar_curso = gr.Textbox(label=textos['pt']['curso'], placeholder="Edite seu curso")
-                salvar_config = gr.Button(textos['pt']['salvar'])
+                markdown_config = gr.Markdown(i18n.get_text("configuracoes"))
+                tema_select = gr.Dropdown(["shivi/calm_seafoam", "default", "soft"], value="shivi/calm_seafoam", label=i18n.get_text("tema"))
+                editar_local = gr.Textbox(label=i18n.get_text("local"), placeholder="Edite seu local de trabalho")
+                editar_curso = gr.Textbox(label=i18n.get_text("curso"), placeholder="Edite seu curso")
+                salvar_config = gr.Button(i18n.get_text("salvar"))
                 config_msg = gr.Markdown(visible=False)
             
             # Login
             login_box = gr.Group(visible=True)
             with login_box:
-                markdown_login = gr.Markdown(textos['pt']['login_titulo'])
-                login_email = gr.Textbox(label=textos['pt']['login_email'])
-                login_senha = gr.Textbox(label=textos['pt']['login_senha'], type="password")
-                login_btn = gr.Button(textos['pt']['login_entrar'])
+                markdown_login = gr.Markdown(i18n.get_text("login_titulo"))
+                login_email = gr.Textbox(label=i18n.get_text("login_email"))
+                login_senha = gr.Textbox(label=i18n.get_text("login_senha"), type="password")
+                login_btn = gr.Button(i18n.get_text("login_entrar"))
                 login_msg = gr.Markdown(visible=False)
-                go_cadastro = gr.Button(textos['pt']['login_nao_tem_conta'])
+                go_cadastro = gr.Button(i18n.get_text("login_nao_tem_conta"))
             
             # Cadastro
             cadastro_box = gr.Group(visible=False)
             with cadastro_box:
-                markdown_cadastro = gr.Markdown(textos['pt']['cadastro_titulo'])
-                cadastro_email = gr.Textbox(label=textos['pt']['cadastro_email'])
-                cadastro_senha = gr.Textbox(label=textos['pt']['cadastro_senha'], type="password")
-                cadastro_instituto = gr.Textbox(label=textos['pt']['cadastro_instituto'])
-                cadastro_campus = gr.Textbox(label=textos['pt']['cadastro_campus'])
-                cadastro_curso = gr.Textbox(label=textos['pt']['cadastro_curso'])
-                cadastro_btn = gr.Button(textos['pt']['cadastro_btn'])
+                markdown_cadastro = gr.Markdown(i18n.get_text("cadastro_titulo"))
+                cadastro_email = gr.Textbox(label=i18n.get_text("cadastro_email"))
+                cadastro_senha = gr.Textbox(label=i18n.get_text("cadastro_senha"), type="password")
+                cadastro_instituto = gr.Textbox(label=i18n.get_text("cadastro_instituto"))
+                cadastro_campus = gr.Textbox(label=i18n.get_text("cadastro_campus"))
+                cadastro_curso = gr.Textbox(label=i18n.get_text("cadastro_curso"))
+                cadastro_btn = gr.Button(i18n.get_text("cadastro_btn"))
                 cadastro_msg = gr.Markdown(visible=False)
-                go_login = gr.Button(textos['pt']['login_ja_tem_conta'])
+                go_login = gr.Button(i18n.get_text("login_ja_tem_conta"))
             
             # Tela principal de análise PDF
             main_box = gr.Group(visible=False)
             with main_box:
-                markdown_main = gr.Markdown(textos['pt']['bem_vindo'])
+                markdown_main = gr.Markdown(i18n.get_text("bem_vindo"))
                 input_arquivo = gr.File(file_count="single", type="filepath", label="Upload PDF")
                 botao_submeter = gr.Button("Enviar")
-                output_resposta = gr.Textbox(label=textos['pt']['pdf_resposta'])
-                botao_add_pdf = gr.Button(textos['pt']['add_pdf'])
-                botao_gerar_pdf = gr.Button(textos['pt']['gerar_pdf'])
-                arquivo_pdf = gr.File(label=textos['pt']['download_pdf'])
-                botao_resetar = gr.Button(textos['pt']['resetar'])
+                output_resposta = gr.Textbox(label=i18n.get_text("pdf_resposta"))
+                botao_add_pdf = gr.Button(i18n.get_text("add_pdf"))
+                botao_gerar_pdf = gr.Button(i18n.get_text("gerar_pdf"))
+                arquivo_pdf = gr.File(label=i18n.get_text("download_pdf"))
+                botao_resetar = gr.Button(i18n.get_text("resetar"))
                 historico_estado = gr.State(value=[])
                 botao_submeter.click(fn=analisar_documentos,
                                     inputs=[input_arquivo],
@@ -266,11 +147,11 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
         
         # Barra lateral à direita
         with gr.Column(scale=1, min_width=180):
-            markdown_menu = gr.Markdown(textos['pt']['menu'])
-            btn_inicio = gr.Button(textos['pt']['inicio'])
-            btn_config = gr.Button(textos['pt']['config'])
+            markdown_menu = gr.Markdown(i18n.get_text("menu"))
+            btn_inicio = gr.Button(i18n.get_text("inicio"))
+            btn_config = gr.Button(i18n.get_text("config"))
             gr.Markdown("---")
-            idioma_select = gr.Dropdown(["pt", "en"], value="pt", label=textos['pt']['idioma'])
+            idioma_select = gr.Dropdown(["pt", "en"], value="pt", label=i18n.get_text("idioma"))
 
     # Funções de navegação
     def ir_para_inicio():
@@ -288,11 +169,24 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
     btn_inicio.click(fn=ir_para_inicio, inputs=[], outputs=[add_analise_box, configuracoes_box, pagina_atual])
     btn_config.click(fn=ir_para_config, inputs=[], outputs=[add_analise_box, configuracoes_box, pagina_atual])
     tema_select.change(fn=trocar_tema, inputs=[tema_select], outputs=[tema_atual])
+    
+    # Evento de troca de idioma simplificado
     idioma_select.change(
         fn=trocar_idioma,
         inputs=[idioma_select],
-        outputs=[logo_img, markdown_bemvindo, lista_analises, botao_add, markdown_config, tema_select, editar_local, editar_curso, salvar_config, markdown_menu, btn_inicio, btn_config, idioma_select, markdown_login, login_email, login_senha, login_btn, go_cadastro, markdown_cadastro, cadastro_email, cadastro_senha, cadastro_instituto, cadastro_campus, cadastro_curso, cadastro_btn, go_login, output_resposta, botao_add_pdf, botao_gerar_pdf, arquivo_pdf, botao_resetar, nome_aluno, matricula_aluno, curso_destino, codigo_curso, carga_horaria, avancar_upload, voltar_add_analise, idioma_atual]
+        outputs=[
+            logo_img, markdown_bemvindo, lista_analises, botao_add,
+            markdown_config, tema_select, editar_local, editar_curso, salvar_config,
+            markdown_menu, btn_inicio, btn_config, idioma_select,
+            markdown_login, login_email, login_senha, login_btn, go_cadastro,
+            markdown_cadastro, cadastro_email, cadastro_senha, cadastro_instituto, 
+            cadastro_campus, cadastro_curso, cadastro_btn, go_login,
+            output_resposta, botao_add_pdf, botao_gerar_pdf, arquivo_pdf, botao_resetar,
+            nome_aluno, matricula_aluno, curso_destino, codigo_curso, carga_horaria, 
+            avancar_upload, voltar_add_analise, idioma_atual
+        ]
     )
+    
     salvar_config.click(fn=salvar_configuracoes, inputs=[tema_select, editar_local, editar_curso], outputs=[config_msg, config_msg])
 
     # Navegação entre telas
