@@ -55,6 +55,13 @@ textos = {
         'gerar_pdf': 'Gerar PDF',
         'download_pdf': 'Download do PDF Respostas',
         'resetar': 'Quero analisar outro Documento!',
+        'nome_aluno': 'Nome do Aluno',
+        'matricula': 'Matrícula',
+        'curso_destino': 'Curso de Destino',
+        'codigo_curso': 'Código do Curso de Destino',
+        'carga_horaria': 'Carga Horária do Curso de Destino',
+        'avancar_upload': 'Avançar para Upload do PDF',
+        'voltar': 'Voltar',
     },
     'en': {
         'bem_vindo': '## Welcome to Nexus Education!\nHere you can analyze course syllabi and generate smart reports.\nClick the "+" button to start a new analysis.',
@@ -88,6 +95,13 @@ textos = {
         'gerar_pdf': 'Generate PDF',
         'download_pdf': 'Download PDF Answers',
         'resetar': 'I want to analyze another document!',
+        'nome_aluno': 'Student Name',
+        'matricula': 'Registration',
+        'curso_destino': 'Destination Course',
+        'codigo_curso': 'Course Code',
+        'carga_horaria': 'Course Workload',
+        'avancar_upload': 'Continue to PDF Upload',
+        'voltar': 'Back',
     }
 }
 
@@ -107,6 +121,28 @@ def atualizar_textos(idioma):
         t['cadastro_titulo'], t['cadastro_email'], t['cadastro_senha'], t['cadastro_instituto'], t['cadastro_campus'], t['cadastro_curso'], t['cadastro_btn'], t['login_ja_tem_conta'],
         # PDF/Análise
         t['pdf_resposta'], t['add_pdf'], t['gerar_pdf'], t['download_pdf'], t['resetar']
+    )
+
+# Função para trocar idioma e atualizar todos os textos
+def trocar_idioma(novo_idioma):
+    t = textos[novo_idioma]
+    return (
+        # Add Análise
+        t['logo'], t['bem_vindo'], t['ementas_anal'], t['nova_analise'],
+        # Configurações
+        t['configuracoes'], t['tema'], t['local'], t['curso'], t['salvar'],
+        # Menu
+        t['menu'], t['inicio'], t['config'], t['idioma'],
+        # Login
+        t['login_titulo'], t['login_email'], t['login_senha'], t['login_entrar'], t['login_nao_tem_conta'],
+        # Cadastro
+        t['cadastro_titulo'], t['cadastro_email'], t['cadastro_senha'], t['cadastro_instituto'], t['cadastro_campus'], t['cadastro_curso'], t['cadastro_btn'], t['login_ja_tem_conta'],
+        # PDF/Análise
+        t['pdf_resposta'], t['add_pdf'], t['gerar_pdf'], t['download_pdf'], t['resetar'],
+        # Formulário
+        t['nome_aluno'], t['matricula'], t['curso_destino'], t['codigo_curso'], t['carga_horaria'], t['avancar_upload'], t['voltar'],
+        # Estado do idioma
+        novo_idioma
     )
 
 # Função para exibir a tela de Add Análise
@@ -162,13 +198,13 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
             # Formulário de dados do aluno e curso de destino
             formulario_analise_box = gr.Group(visible=False, elem_id="formulario_analise_box")
             with formulario_analise_box:
-                nome_aluno = gr.Textbox(label="Nome do Aluno")
-                matricula_aluno = gr.Textbox(label="Matrícula")
-                curso_destino = gr.Textbox(label="Curso de Destino")
-                codigo_curso = gr.Textbox(label="Código do Curso de Destino")
-                carga_horaria = gr.Textbox(label="Carga Horária do Curso de Destino")
-                avancar_upload = gr.Button("Avançar para Upload do PDF")
-                voltar_add_analise = gr.Button("Voltar")
+                nome_aluno = gr.Textbox(label=textos['pt']['nome_aluno'])
+                matricula_aluno = gr.Textbox(label=textos['pt']['matricula'])
+                curso_destino = gr.Textbox(label=textos['pt']['curso_destino'])
+                codigo_curso = gr.Textbox(label=textos['pt']['codigo_curso'])
+                carga_horaria = gr.Textbox(label=textos['pt']['carga_horaria'])
+                avancar_upload = gr.Button(textos['pt']['avancar_upload'])
+                voltar_add_analise = gr.Button(textos['pt']['voltar'])
             
             # Configurações
             configuracoes_box = gr.Group(visible=False, elem_id="configuracoes_box")
@@ -243,8 +279,7 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
         return gr.update(visible=False), gr.update(visible=True), "configuracoes"
     def trocar_tema(novo_tema):
         return novo_tema
-    def trocar_idioma(novo_idioma):
-        return novo_idioma
+
     def salvar_configuracoes(tema, local, curso):
         # Aqui pode salvar no banco futuramente
         return f"Configurações salvas! Tema: {tema}, Local: {local}, Curso: {curso}", gr.update(visible=True)
@@ -256,7 +291,7 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
     idioma_select.change(
         fn=trocar_idioma,
         inputs=[idioma_select],
-        outputs=[logo_img, markdown_bemvindo, lista_analises, botao_add, markdown_config, tema_select, editar_local, editar_curso, salvar_config, markdown_menu, btn_inicio, btn_config, idioma_select, markdown_login, login_email, login_senha, login_btn, go_cadastro, markdown_cadastro, cadastro_email, cadastro_senha, cadastro_instituto, cadastro_campus, cadastro_curso, cadastro_btn, go_login, output_resposta, botao_add_pdf, botao_gerar_pdf, arquivo_pdf, botao_resetar, idioma_atual]
+        outputs=[logo_img, markdown_bemvindo, lista_analises, botao_add, markdown_config, tema_select, editar_local, editar_curso, salvar_config, markdown_menu, btn_inicio, btn_config, idioma_select, markdown_login, login_email, login_senha, login_btn, go_cadastro, markdown_cadastro, cadastro_email, cadastro_senha, cadastro_instituto, cadastro_campus, cadastro_curso, cadastro_btn, go_login, output_resposta, botao_add_pdf, botao_gerar_pdf, arquivo_pdf, botao_resetar, nome_aluno, matricula_aluno, curso_destino, codigo_curso, carga_horaria, avancar_upload, voltar_add_analise, idioma_atual]
     )
     salvar_config.click(fn=salvar_configuracoes, inputs=[tema_select, editar_local, editar_curso], outputs=[config_msg, config_msg])
 
