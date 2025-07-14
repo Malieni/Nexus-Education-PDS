@@ -103,7 +103,7 @@ def mostrar_pagina(pagina_destino):
     }
     
     if pagina_destino in paginas:
-        return [gr.update(visible=visivel) for visivel in paginas[pagina_destino]
+        return [gr.update(visible=visivel) for visivel in paginas[pagina_destino]]
     return [gr.update(visible=False)] * 5
 
 def ir_para_inicio():
