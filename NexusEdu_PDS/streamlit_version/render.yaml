@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: nexus-education-pds
+    env: python
+    buildCommand: cd streamlit_version && pip install -r requirements.txt
+    startCommand: cd streamlit_version && streamlit run app_streamlit.py --server.port $PORT --server.address 0.0.0.0
+    envVars:
+      - key: chave
+        value: sua-api-key-aqui
+    healthCheckPath: /
+    autoDeploy: true

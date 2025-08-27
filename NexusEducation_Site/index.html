@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Education PDS</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Nexus Education</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">Início</a>
+                <a href="#analises" class="nav-link">Análises</a>
+                <a href="#config" class="nav-link">Configurações</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-language" id="languageToggle">
+                    <i class="fas fa-globe"></i>
+                    <span>PT</span>
+                </button>
+                <button class="btn-theme" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Login Section -->
+        <section id="loginSection" class="section active">
+            <div class="container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <div class="logo-large">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h1>Bem-vindo ao Nexus Education</h1>
+                        <p>Faça login para acessar suas análises de PDS</p>
+                    </div>
+                    
+                    <form class="auth-form" id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="loginEmail" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="loginPassword">Senha</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="loginPassword" required>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Entrar
+                        </button>
+                        
+                        <div class="auth-footer">
+                            <p>Não tem uma conta? <a href="#" id="showRegister">Cadastre-se</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Register Section -->
+        <section id="registerSection" class="section">
+            <div class="container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <div class="logo-large">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h1>Criar Conta</h1>
+                        <p>Preencha os dados para se cadastrar</p>
+                    </div>
+                    
+                    <form class="auth-form" id="registerForm">
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="registerEmail" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="registerPassword">Senha</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="registerPassword" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="registerInstitute">Instituto</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-university"></i>
+                                <input type="text" id="registerInstitute" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="registerCampus">Campus</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <input type="text" id="registerCampus" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="registerCourse">Curso</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-book"></i>
+                                <input type="text" id="registerCourse" required>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-user-plus"></i>
+                            Cadastrar
+                        </button>
+                        
+                        <div class="auth-footer">
+                            <p>Já tem uma conta? <a href="#" id="showLogin">Faça login</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboardSection" class="section">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h1>Dashboard</h1>
+                    <p>Bem-vindo de volta, <span id="userName">Usuário</span>!</p>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Análises Recentes</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="analyses-list" id="analysesList">
+                                <!-- Análises serão inseridas aqui dinamicamente -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-plus-circle"></i>
+                            <h3>Nova Análise</h3>
+                        </div>
+                        <div class="card-content">
+                            <button class="btn-secondary" id="newAnalysisBtn">
+                                <i class="fas fa-plus"></i>
+                                Iniciar Nova Análise
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Analysis Section -->
+        <section id="newAnalysisSection" class="section">
+            <div class="container">
+                <div class="analysis-card">
+                    <div class="analysis-header">
+                        <button class="btn-back" id="backToDashboard">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                        <h2>Nova Análise de PDS</h2>
+                    </div>
+                    
+                    <form class="analysis-form" id="analysisForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="studentName">Nome do Aluno</label>
+                                <input type="text" id="studentName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentId">Matrícula</label>
+                                <input type="text" id="studentId" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="targetCourse">Curso de Destino</label>
+                                <input type="text" id="targetCourse" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="courseCode">Código do Curso</label>
+                                <input type="text" id="courseCode" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="workload">Carga Horária</label>
+                            <input type="number" id="workload" required>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-arrow-right"></i>
+                            Continuar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- PDF Upload Section -->
+        <section id="pdfUploadSection" class="section">
+            <div class="container">
+                <div class="upload-card">
+                    <div class="upload-header">
+                        <button class="btn-back" id="backToAnalysis">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                        <h2>Upload de Documentos</h2>
+                    </div>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Arraste e solte seus PDFs aqui</h3>
+                        <p>ou clique para selecionar arquivos</p>
+                        <input type="file" id="fileInput" accept=".pdf" multiple>
+                    </div>
+                    
+                    <div class="uploaded-files" id="uploadedFiles">
+                        <!-- Arquivos serão listados aqui -->
+                    </div>
+                    
+                    <div class="upload-actions">
+                        <button class="btn-primary" id="analyzeBtn" disabled>
+                            <i class="fas fa-search"></i>
+                            Analisar Documentos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="resultsSection" class="section">
+            <div class="container">
+                <div class="results-card">
+                    <div class="results-header">
+                        <button class="btn-back" id="backToUpload">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                        <h2>Resultados da Análise</h2>
+                    </div>
+                    
+                    <div class="results-content">
+                        <div class="analysis-summary">
+                            <h3>Resumo da Análise</h3>
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <span class="label">Disciplinas Analisadas:</span>
+                                    <span class="value" id="disciplinesCount">0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="label">Créditos Reconhecidos:</span>
+                                    <span class="value" id="creditsCount">0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="label">Status:</span>
+                                    <span class="value status-success" id="analysisStatus">Concluída</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="analysis-details">
+                            <h3>Detalhes da Análise</h3>
+                            <div class="details-content" id="analysisDetails">
+                                <!-- Detalhes serão inseridos aqui -->
+                            </div>
+                        </div>
+                        
+                        <div class="results-actions">
+                            <button class="btn-secondary" id="addToHistoryBtn">
+                                <i class="fas fa-save"></i>
+                                Adicionar ao Histórico
+                            </button>
+                            <button class="btn-primary" id="generatePdfBtn">
+                                <i class="fas fa-file-pdf"></i>
+                                Gerar PDF
+                            </button>
+                            <button class="btn-outline" id="resetBtn">
+                                <i class="fas fa-redo"></i>
+                                Nova Análise
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Processando...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

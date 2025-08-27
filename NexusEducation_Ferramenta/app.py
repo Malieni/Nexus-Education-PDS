@@ -50,12 +50,16 @@ def trocar_idioma(novo_idioma):
     # Salva o idioma selecionado
     save_language(novo_idioma)
     
+    # Atualiza o idioma no módulo i18n
+    i18n.set_language(novo_idioma)
+    
     # Retorna uma mensagem para o usuário recarregar a página
     if novo_idioma == 'pt':
         message = "Idioma alterado para Português! Por favor, recarregue a página (F5) para ver as mudanças."
     else:
         message = "Language changed to English! Please reload the page (F5) to see the changes."
     
+    # Retorna todos os textos atualizados na ordem correta
     return (
         # Add Análise
         i18n.get_text("logo", novo_idioma), i18n.get_text("bem_vindo", novo_idioma), 
@@ -265,8 +269,7 @@ with gr.Blocks(theme='shivi/calm_seafoam') as app:
     )
     
     # Configurações
-    salvar_config.click(fn=salvar_configuracoes, inputs=[tema_select, editar_local, editar_curso], outputs=[config_msg, config_msg])
-    tema_select.change(fn=trocar_tema, inputs=[tema_select], outputs=[tema_atual])
+    salvar_config.click(fn=salvar_configuracoes, inputs=[editar_local, editar_curso], outputs=[config_msg, config_msg])
 
     # ===== NAVEGAÇÃO ENTRE TELAS =====
     # Login/Cadastro
