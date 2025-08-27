@@ -183,8 +183,3 @@ Contribuições são bem-vindas! Para contribuir:
 
 ---
 
-**Desenvolvido com ❤️ para a comunidade educacional**
-
-**Versão**: 1.0.0  
-**Última atualização**: Dezembro 2024  
-**Compatível com**: Hugging Face Spaces ✅
