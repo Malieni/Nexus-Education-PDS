@@ -3,7 +3,6 @@ from llama_index.core import Settings
 from fpdf import FPDF
 from datetime import datetime
 import streamlit as st
-from utils import gerar_timestamp
 import json
 import tempfile
 import os
