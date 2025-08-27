@@ -8,7 +8,6 @@ from fpdf import FPDF
 from datetime import datetime
 from auth_streamlit import autenticar, cadastrar
 from pdf_tools_streamlit import analisar_documentos, add_historico, gerar_pdf, resetar_aplicacao
-from utils import gerar_timestamp
 from i18n import i18n
 
 # Configuração da página Streamlit
