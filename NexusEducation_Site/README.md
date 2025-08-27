@@ -140,7 +140,6 @@ Este frontend foi desenvolvido para o projeto Nexus Education PDS e segue as mes
 
 ---
 
-**Desenvolvido com ❤️ para modernizar a experiência do usuário do Nexus Education PDS**
 
 
 
